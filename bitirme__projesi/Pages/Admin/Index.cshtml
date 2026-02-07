@@ -1,0 +1,146 @@
+@page
+@model bitirme__projesi.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<div class="row g-4 mb-4">
+    <!-- Özet Kartları -->
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-white-50 mb-1">Toplam Ürün</h6>
+                        <h2 class="mb-0">@Model.ProductCount</h2>
+                    </div>
+                    <span class="material-symbols-outlined opacity-50" style="font-size: 3rem;">inventory_2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-white-50 mb-1">Toplam Sipariş</h6>
+                        <h2 class="mb-0">@Model.OrderCount</h2>
+                    </div>
+                    <span class="material-symbols-outlined opacity-50" style="font-size: 3rem;">receipt_long</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-dark-50 mb-1">Bekleyen</h6>
+                        <h2 class="mb-0">@Model.PendingOrderCount</h2>
+                    </div>
+                    <span class="material-symbols-outlined opacity-50" style="font-size: 3rem;">pending_actions</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-white-50 mb-1">Kategori</h6>
+                        <h2 class="mb-0">@Model.CategoryCount</h2>
+                    </div>
+                    <span class="material-symbols-outlined opacity-50" style="font-size: 3rem;">category</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Son Siparişler -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Son Siparişler</h5>
+                <a asp-page="/Admin/Orders/Index" class="btn btn-sm btn-outline-primary">Tümünü Gör</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Sipariş No</th>
+                                <th class="border-0">Tarih</th>
+                                <th class="border-0">Tutar</th>
+                                <th class="border-0">Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td><a asp-page="/Admin/Orders/Details" asp-route-id="@order.Id" class="text-decoration-none">@order.OrderNumber</a></td>
+                                    <td>@order.CreatedAt.ToString("dd.MM.yyyy")</td>
+                                    <td class="fw-medium">₺@order.TotalAmount.ToString("N2")</td>
+                                    <td>
+                                        @{
+                                            var statusClass = order.Status switch
+                                            {
+                                                Natura.Entity.OrderStatus.Pending => "bg-warning text-dark",
+                                                Natura.Entity.OrderStatus.Processing => "bg-info",
+                                                Natura.Entity.OrderStatus.Shipped => "bg-primary",
+                                                Natura.Entity.OrderStatus.Delivered => "bg-success",
+                                                Natura.Entity.OrderStatus.Cancelled => "bg-danger",
+                                                _ => "bg-secondary"
+                                            };
+                                            var statusText = order.Status switch
+                                            {
+                                                Natura.Entity.OrderStatus.Pending => "Beklemede",
+                                                Natura.Entity.OrderStatus.Processing => "Hazırlanıyor",
+                                                Natura.Entity.OrderStatus.Shipped => "Kargoda",
+                                                Natura.Entity.OrderStatus.Delivered => "Teslim Edildi",
+                                                Natura.Entity.OrderStatus.Cancelled => "İptal",
+                                                _ => "?"
+                                            };
+                                        }
+                                        <span class="badge @statusClass">@statusText</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hızlı İşlemler -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-page="/Admin/Products/Create" class="btn btn-primary">
+                        <span class="material-symbols-outlined align-middle me-2">add_circle</span>
+                        Yeni Ürün Ekle
+                    </a>
+                    <a asp-page="/Admin/Categories/Create" class="btn btn-outline-primary">
+                        <span class="material-symbols-outlined align-middle me-2">create_new_folder</span>
+                        Yeni Kategori Ekle
+                    </a>
+                    <a asp-page="/Admin/Orders/Index" class="btn btn-outline-secondary">
+                        <span class="material-symbols-outlined align-middle me-2">fact_check</span>
+                        Siparişleri Yönet
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

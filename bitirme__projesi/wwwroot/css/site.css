@@ -1,0 +1,321 @@
+:root {
+  --natura-green: #2c5f2d;
+  --natura-green-dark: #1f421f;
+  --natura-cream: #f5f5dc;
+  --natura-gold: #d4af37;
+  --bs-primary: #2c5f2d;
+  --bs-primary-rgb: 44, 95, 45;
+  --bs-body-bg: #f5f5dc;
+  --bs-body-font-family: "Lato", sans-serif;
+}
+
+body {
+  color: #131613;
+}
+
+/* Filtre Butonları */
+.btn-filter {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 2rem;
+  border: 2px solid var(--natura-green);
+  background-color: transparent;
+  color: var(--natura-green);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-filter:hover,
+.btn-filter.active {
+  background-color: var(--natura-green);
+  color: white;
+}
+
+/* Header Butonları */
+.btn-sm {
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+  min-width: 80px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif {
+  font-family: "Playfair Display", serif;
+}
+
+.text-primary {
+  color: var(--natura-green) !important;
+}
+
+.bg-primary {
+  background-color: var(--natura-green) !important;
+}
+
+.text-gold {
+  color: var(--natura-gold) !important;
+}
+
+.text-muted-custom {
+  color: #6d7e6d;
+}
+
+.btn-primary {
+  background-color: var(--natura-green);
+  border-color: var(--natura-green);
+  padding: 0.75rem 2rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--natura-green-dark);
+  border-color: var(--natura-green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 95, 45, 0.3);
+}
+
+.btn-outline-primary {
+  color: var(--natura-green);
+  border-color: var(--natura-green);
+  border-width: 2px;
+  font-weight: 700;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--natura-green);
+  border-color: var(--natura-green);
+  color: white;
+}
+
+.navbar {
+  background-color: rgba(245, 245, 220, 0.95);
+  backdrop-filter: blur(5px);
+  border-bottom: 1px solid rgba(44, 95, 45, 0.1);
+}
+
+.nav-link {
+  color: #131613;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--natura-green);
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  border: none;
+  background: transparent;
+  color: #131613;
+}
+
+.icon-btn:hover {
+  background-color: rgba(44, 95, 45, 0.1);
+  color: var(--natura-green);
+}
+
+.hero-section {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCYckvXHZ7RN22lBilVA3x-CVYE-HYikFcdgu-Wol705rpzjeGvW9oTb67oewjHwSn7j3EjAKMASQaRE9dAN5AVXLx3j0I_1JCzWmyxhadO1Qg9cG1YxCGBLpZTCGLvNwLWmWRr1PT5L62AanI7Ub8Cl8eoNIP2l3r2RVbTvkXIhMrwBwgKwKw-yEFNlRacrInDBPDjoFqwi-38akrFXFicCuH2oiRFoOPqhzYSVwlImSGPK3iRKKgkZwvnTuegRTKtbPt14ZIscDr-");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(21, 29, 21, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.feature-card {
+  background-color: var(--natura-cream);
+  border: 1px solid #dee3de;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(44, 95, 45, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--natura-green);
+  margin-bottom: 1rem;
+}
+
+.product-card {
+  border: 1px solid #f1f3f1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.product-img-wrapper {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.08);
+}
+
+.add-to-cart-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  color: var(--natura-green);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .add-to-cart-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.add-to-cart-btn:hover {
+  background-color: var(--natura-green);
+  color: white;
+}
+
+.section-separator {
+  height: 4px;
+  width: 80px;
+  background-color: rgba(44, 95, 45, 0.2);
+  border-radius: 2px;
+  margin: 0.5rem auto 0;
+}
+
+.story-wrapper {
+  background-color: #f0f2f0;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.story-bg-image {
+  background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZrwLQIO0DB9GDhnkdiF7WczWGPH1Rab6sBs7sjv3MT8Doshm4vh3DYWmpM4IlrJZ6jEzwR9-l4A8BMVyVn3CreXlEP1SOPRZQoivdn1vb5qyhdCQuSy6s7V6OnsS-LTCecsO1xK8Jkqgc5S5JO2mxYmlMNvFeQtVMlJj9q5LtO6NbSjD98lgbOOzHEqGbPo4yyWZwBHYr7uS3LyuP2hdaPchT32SiUHFz_s5UmLXZ-4Kp5JGixmB2SEBg-uSqs5F65rLKbAWESiVk");
+  background-size: cover;
+  background-position: center;
+  min-height: 400px;
+}
+
+.footer {
+  background-color: var(--natura-green);
+  color: white;
+  position: relative;
+  z-index: 100;
+  margin-top: 0;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: white;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.social-btn:hover {
+  background-color: var(--natura-gold);
+  color: white;
+}
+
+.form-control-newsletter {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.form-control-newsletter::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-control-newsletter:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--natura-gold);
+  color: white;
+  box-shadow: none;
+}

@@ -1,0 +1,131 @@
+@page "{id:int}"
+@model bitirme__projesi.Pages.Admin.Orders.DetailsModel
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+    Layout = "_AdminLayout";
+}
+
+@if (Model.Order != null)
+{
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Sipariş #@Model.Order.OrderNumber</h5>
+                    @{
+                        var statusClass = Model.Order.Status switch
+                        {
+                            Natura.Entity.OrderStatus.Pending => "bg-warning text-dark",
+                            Natura.Entity.OrderStatus.Processing => "bg-info",
+                            Natura.Entity.OrderStatus.Shipped => "bg-primary",
+                            Natura.Entity.OrderStatus.Delivered => "bg-success",
+                            Natura.Entity.OrderStatus.Cancelled => "bg-danger",
+                            _ => "bg-secondary"
+                        };
+                        var statusText = Model.Order.Status switch
+                        {
+                            Natura.Entity.OrderStatus.Pending => "Beklemede",
+                            Natura.Entity.OrderStatus.Processing => "Hazırlanıyor",
+                            Natura.Entity.OrderStatus.Shipped => "Kargoda",
+                            Natura.Entity.OrderStatus.Delivered => "Teslim Edildi",
+                            Natura.Entity.OrderStatus.Cancelled => "İptal",
+                            _ => "?"
+                        };
+                    }
+                    <span class="badge @statusClass fs-6">@statusText</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <span class="text-muted small">Sipariş Tarihi</span>
+                            <p class="fw-medium mb-0">@Model.Order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small">Müşteri</span>
+                            <p class="fw-medium mb-0">@Model.Order.User?.FirstName @Model.Order.User?.LastName</p>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small">E-posta</span>
+                            <p class="fw-medium mb-0">@Model.Order.User?.Email</p>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold mb-3">Sipariş Kalemleri</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Ürün</th>
+                                    <th class="text-center">Birim Fiyat</th>
+                                    <th class="text-center">Adet</th>
+                                    <th class="text-end">Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Order.OrderItems)
+                                {
+                                    <tr>
+                                        <td>@item.Product?.Name</td>
+                                        <td class="text-center">₺@item.UnitPrice.ToString("N2")</td>
+                                        <td class="text-center">@item.Quantity</td>
+                                        <td class="text-end fw-medium">₺@item.TotalPrice.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="bg-light">
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Genel Toplam:</td>
+                                    <td class="text-end fw-bold text-primary fs-5">₺@Model.Order.TotalAmount.ToString("N2")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Teslimat Bilgileri -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">Teslimat Bilgileri</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><span class="material-symbols-outlined align-middle me-2 text-primary" style="font-size: 18px;">location_on</span>@Model.Order.ShippingAddress</p>
+                    <p class="mb-1"><span class="material-symbols-outlined align-middle me-2 text-primary" style="font-size: 18px;">location_city</span>@Model.Order.ShippingCity, @Model.Order.ShippingPostalCode</p>
+                    <p class="mb-0"><span class="material-symbols-outlined align-middle me-2 text-primary" style="font-size: 18px;">phone</span>@Model.Order.ShippingPhone</p>
+                </div>
+            </div>
+
+            <!-- Durum Güncelle -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">Durum Güncelle</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="UpdateStatus">
+                        <input type="hidden" name="orderId" value="@Model.Order.Id" />
+                        <div class="mb-3">
+                            <select name="status" class="form-select">
+                                <option value="Pending" selected="@(Model.Order.Status == Natura.Entity.OrderStatus.Pending)">Beklemede</option>
+                                <option value="Processing" selected="@(Model.Order.Status == Natura.Entity.OrderStatus.Processing)">Hazırlanıyor</option>
+                                <option value="Shipped" selected="@(Model.Order.Status == Natura.Entity.OrderStatus.Shipped)">Kargoda</option>
+                                <option value="Delivered" selected="@(Model.Order.Status == Natura.Entity.OrderStatus.Delivered)">Teslim Edildi</option>
+                                <option value="Cancelled" selected="@(Model.Order.Status == Natura.Entity.OrderStatus.Cancelled)">İptal</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <span class="material-symbols-outlined align-middle me-1">update</span>
+                            Durumu Güncelle
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <a asp-page="/Admin/Orders/Index" class="btn btn-outline-secondary w-100 mt-3">
+                <span class="material-symbols-outlined align-middle me-1" style="font-size: 18px;">arrow_back</span>
+                Siparişlere Dön
+            </a>
+        </div>
+    </div>
+}

@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Natura Organik</title>
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:wght@400;700&display=swap"
+          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .page-content {
+            flex: 1 0 auto;
+        }
+        .site-footer {
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <nav class="navbar navbar-expand-lg sticky-top" style="background-color: rgba(245, 245, 220, 0.95); backdrop-filter: blur(5px);">
+                <div class="container">
+                    <a class="navbar-brand d-flex align-items-center gap-2" asp-page="/Index">
+                        <span class="material-symbols-outlined text-primary fs-2">spa</span>
+                        <span class="fs-4 fw-bold text-primary">Natura</span>
+                    </a>
+                    <button aria-controls="navbarContent"
+                            aria-expanded="false"
+                            aria-label="Menüyü aç/kapat"
+                            class="navbar-toggler border-0"
+                            data-bs-target="#navbarContent"
+                            data-bs-toggle="collapse"
+                            type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Index">Ana Sayfa</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Products/Index">Ürünler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/About">Hakkımızda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Contact">İletişim</a>
+                            </li>
+                        </ul>
+                        <form action="/Products" method="get" class="d-flex me-2 mt-3 mt-lg-0">
+                            <div class="input-group input-group-sm" style="width: 220px;">
+                                <input type="text" name="searchQuery" class="form-control" placeholder="Ürün ara..." aria-label="Ürün ara" />
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">search</span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="d-flex gap-2 justify-content-center mt-3 mt-lg-0 align-items-center">
+                            <a asp-page="/Cart/Index" class="btn btn-outline-secondary btn-sm" title="Sepetim">
+                                <span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle;">shopping_bag</span>
+                            </a>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle;">account_circle</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><span class="dropdown-item-text small text-muted">@User.Identity.Name</span></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-page="/Orders/Index">Siparişlerim</a></li>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-page="/Admin/Index">Admin Paneli</a></li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" asp-page="/Account/Logout">Çıkış Yap</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-page="/Account/Login" class="btn btn-outline-primary btn-sm">Giriş</a>
+                                <a asp-page="/Account/Register" class="btn btn-primary btn-sm">Kayıt Ol</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            @RenderBody()
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer" style="background-color: #2C5F2D; color: white; padding: 3rem 0 2rem;">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined fs-3" style="color: #D4AF37;">spa</span>
+                            <h5 class="fw-bold mb-0">Natura</h5>
+                        </div>
+                        <p class="small opacity-75">
+                            %100 organik, yerel üretim ürünlerle dünyayı besliyoruz.
+                            Sizin için iyi, gezegen için iyi.
+                        </p>
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <h6 class="fw-bold mb-3" style="color: #D4AF37;">Alışveriş</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a class="text-white-50 text-decoration-none" asp-page="/Products/Index">Tüm Ürünler</a></li>
+                            <li class="mb-2"><a class="text-white-50 text-decoration-none" asp-page="/Products/Index" asp-route-categoryId="1">Sebzeler</a></li>
+                            <li class="mb-2"><a class="text-white-50 text-decoration-none" asp-page="/Products/Index" asp-route-categoryId="2">Meyveler</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <h6 class="fw-bold mb-3" style="color: #D4AF37;">Kurumsal</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a class="text-white-50 text-decoration-none" asp-page="/About">Hakkımızda</a></li>
+                            <li class="mb-2"><a class="text-white-50 text-decoration-none" asp-page="/Contact">İletişim</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 col-lg-5">
+                        <h6 class="fw-bold mb-3" style="color: #D4AF37;">İletişime Geçin</h6>
+                        <p class="small opacity-75 mb-3">Sorularınız için bize ulaşın, en kısa sürede yanıtlayalım.</p>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">phone</span>
+                                <span class="small">+90 (212) 123 12 12</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">mail</span>
+                                <span class="small">info@natura.com.tr</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">location_on</span>
+                                <span class="small">İstanbul, Türkiye</span>
+                            </div>
+                        </div>
+                        <a asp-page="/Contact" class="btn btn-light btn-sm mt-3">
+                            <span class="material-symbols-outlined align-middle me-1" style="font-size: 16px;">send</span>
+                            Mesaj Gönder
+                        </a>
+                    </div>
+                </div>
+                <hr class="my-4 opacity-25">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <p class="small opacity-50 mb-0">© 2026 Natura Organik Gıda. Tüm hakları saklıdır.</p>
+                    <div class="d-flex gap-3 small opacity-50 mt-2 mt-md-0">
+                        <a class="text-white text-decoration-none" href="#">Gizlilik Politikası</a>
+                        <a class="text-white text-decoration-none" href="#">Kullanım Şartları</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,148 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content text-center text-white px-3">
+        <h1 class="display-3 fw-bold mb-4">Doğanın Saflığını Tadın</h1>
+        <h2 class="h5 fw-light mb-5 mx-auto"
+            style="max-width: 600px; line-height: 1.6; opacity: 0.9">
+            Sürdürülebilir çiftliklerimizden doğrudan sofranıza, 
+            premium organik ürünler. Doğaya saygılı, sağlığa uygun.
+        </h2>
+        <a class="btn btn-primary btn-lg shadow" asp-page="/Products/Index">Alışverişe Başla</a>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="feature-card p-4 h-100 d-flex flex-col flex-column align-items-center text-center">
+                    <div class="feature-icon">
+                        <span class="material-symbols-outlined fs-2">eco</span>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3">%100 Organik Sertifikalı</h3>
+                    <p class="text-muted-custom small mb-0">
+                        Pestisit ve zararlı kimyasallardan arındırılmış, 
+                        saf beslenme garantisi.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card p-4 h-100 d-flex flex-col flex-column align-items-center text-center">
+                    <div class="feature-icon">
+                        <span class="material-symbols-outlined fs-2">local_shipping</span>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3">Çiftlikten Sofraya</h3>
+                    <p class="text-muted-custom small mb-0">
+                        En taze halinde hasat edilen ürünler, 
+                        24 saat içinde kapınıza teslim.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card p-4 h-100 d-flex flex-col flex-column align-items-center text-center">
+                    <div class="feature-icon">
+                        <span class="material-symbols-outlined fs-2">recycling</span>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3">Sürdürülebilir Ambalaj</h3>
+                    <p class="text-muted-custom small mb-0">
+                        Doğayı seviyoruz. Tüm ambalajlarımız 
+                        %100 biyolojik olarak parçalanabilir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="text-gold fw-bold text-uppercase small letter-spacing-2"
+                  style="letter-spacing: 2px">Taze Ürünler</span>
+            <h2 class="text-primary display-5 fw-bold mt-2">Öne Çıkan Ürünler</h2>
+            <div class="section-separator"></div>
+        </div>
+        <div class="row g-4">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="card product-card h-100">
+                        <a asp-page="/Products/Details" asp-route-id="@product.Id" class="text-decoration-none">
+                            <div class="product-img-wrapper">
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <div class="product-img" style="background-image: url('@product.ImageUrl');"></div>
+                                }
+                                else
+                                {
+                                    <div class="product-img d-flex align-items-center justify-content-center bg-light">
+                                        <span class="material-symbols-outlined text-muted" style="font-size: 4rem;">spa</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="card-body p-3">
+                                <span class="text-gold fw-bold text-uppercase"
+                                      style="font-size: 0.75rem; letter-spacing: 1px">@product.Category?.Name</span>
+                                <h3 class="h5 fw-bold text-dark mt-1 text-truncate">
+                                    @product.Name
+                                </h3>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    @if (product.DiscountPrice.HasValue)
+                                    {
+                                        <span>
+                                            <span class="text-decoration-line-through text-muted small">₺@product.Price.ToString("N2")</span>
+                                            <span class="text-primary fw-bold">₺@product.DiscountPrice.Value.ToString("N2")</span>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fw-medium">₺@product.Price.ToString("N2") <span class="small">/ @product.Unit</span></span>
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="d-flex justify-content-center mt-5">
+            <a asp-page="/Products/Index" class="btn btn-link text-primary fw-bold text-decoration-none border-bottom border-2 border-primary pb-1 d-flex align-items-center gap-2"
+                    style="border-radius: 0">
+                Tüm Ürünleri Gör
+                <span class="material-symbols-outlined fs-5">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="story-wrapper shadow-sm">
+            <div class="row g-0">
+                <div class="col-lg-6 story-bg-image"></div>
+                <div class="col-lg-6 p-5 d-flex flex-column justify-content-center">
+                    <span class="text-gold fw-bold text-uppercase small"
+                          style="letter-spacing: 2px">Hakkımızda</span>
+                    <h2 class="text-primary display-5 fw-bold mt-2 mb-4 font-serif lh-sm">
+                        Doğaya Köklü <br />Bağlılık.
+                    </h2>
+                    <p class="text-muted-custom fs-5 mb-4" style="line-height: 1.8">
+                        Natura, basit bir inançla başladı: yediğimiz yiyecekler, 
+                        geldiği toprak kadar saf olmalı. Toprağa saygı duyan yerel 
+                        çiftçilerle ortaklık kurarak, her hasadın canlı, besleyici 
+                        ve lezzet dolu olmasını sağlıyoruz.
+                    </p>
+                    <div>
+                        <a class="btn btn-outline-primary px-4 py-2 rounded-3" asp-page="/About">Hikayemizi Okuyun</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

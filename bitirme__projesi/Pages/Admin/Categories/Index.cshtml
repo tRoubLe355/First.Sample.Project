@@ -1,0 +1,56 @@
+@page
+@model bitirme__projesi.Pages.Admin.Categories.IndexModel
+@{
+    ViewData["Title"] = "Kategori Yönetimi";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Kategoriler (@Model.Categories.Count())</h5>
+    <a asp-page="/Admin/Categories/Create" class="btn btn-primary">
+        <span class="material-symbols-outlined align-middle me-1">add</span>
+        Yeni Kategori
+    </a>
+</div>
+
+<div class="row g-4">
+    @foreach (var category in Model.Categories)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title fw-bold mb-1">@category.Name</h5>
+                            <p class="text-muted small mb-2">@category.Description</p>
+                            <span class="badge bg-primary">@category.Products?.Count ürün</span>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                <span class="material-symbols-outlined">more_vert</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" asp-page="/Admin/Categories/Edit" asp-route-id="@category.Id">
+                                        <span class="material-symbols-outlined align-middle me-2" style="font-size: 18px;">edit</span>
+                                        Düzenle
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@category.Id"
+                                          onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?')">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <span class="material-symbols-outlined align-middle me-2" style="font-size: 18px;">delete</span>
+                                            Sil
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

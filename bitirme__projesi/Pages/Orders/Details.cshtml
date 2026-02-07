@@ -1,0 +1,141 @@
+@page "{id:int}"
+@model bitirme__projesi.Pages.Orders.DetailsModel
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+@if (Model.Order != null)
+{
+    <section class="py-5">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-page="/Index" class="text-decoration-none">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a asp-page="/Orders/Index" class="text-decoration-none">Siparişlerim</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Order.OrderNumber</li>
+                </ol>
+            </nav>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Sipariş Detayları</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3 mb-4">
+                                <div class="col-6 col-md-3">
+                                    <span class="text-muted small">Sipariş No</span>
+                                    <p class="fw-bold mb-0">@Model.Order.OrderNumber</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <span class="text-muted small">Tarih</span>
+                                    <p class="fw-medium mb-0">@Model.Order.CreatedAt.ToString("dd.MM.yyyy")</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <span class="text-muted small">Durum</span>
+                                    @{
+                                        var statusClass = Model.Order.Status switch
+                                        {
+                                            Natura.Entity.OrderStatus.Pending => "bg-warning text-dark",
+                                            Natura.Entity.OrderStatus.Processing => "bg-info text-white",
+                                            Natura.Entity.OrderStatus.Shipped => "bg-primary text-white",
+                                            Natura.Entity.OrderStatus.Delivered => "bg-success text-white",
+                                            Natura.Entity.OrderStatus.Cancelled => "bg-danger text-white",
+                                            _ => "bg-secondary text-white"
+                                        };
+                                        var statusText = Model.Order.Status switch
+                                        {
+                                            Natura.Entity.OrderStatus.Pending => "Beklemede",
+                                            Natura.Entity.OrderStatus.Processing => "Hazırlanıyor",
+                                            Natura.Entity.OrderStatus.Shipped => "Kargoda",
+                                            Natura.Entity.OrderStatus.Delivered => "Teslim Edildi",
+                                            Natura.Entity.OrderStatus.Cancelled => "İptal Edildi",
+                                            _ => "Bilinmiyor"
+                                        };
+                                    }
+                                    <p class="mb-0"><span class="badge @statusClass">@statusText</span></p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <span class="text-muted small">Toplam</span>
+                                    <p class="fw-bold text-primary mb-0">₺@Model.Order.TotalAmount.ToString("N2")</p>
+                                </div>
+                            </div>
+
+                            <h6 class="fw-bold mb-3">Ürünler</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Ürün</th>
+                                            <th class="text-center">Birim Fiyat</th>
+                                            <th class="text-center">Adet</th>
+                                            <th class="text-end">Toplam</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Order.OrderItems)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
+                                                        {
+                                                            <img src="@item.Product.ImageUrl" class="rounded" 
+                                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                                        }
+                                                        <span>@item.Product?.Name</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">₺@item.UnitPrice.ToString("N2")</td>
+                                                <td class="text-center">@item.Quantity</td>
+                                                <td class="text-end fw-medium">₺@item.TotalPrice.ToString("N2")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Teslimat Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">
+                                <span class="material-symbols-outlined align-middle me-2 text-primary">location_on</span>
+                                @Model.Order.ShippingAddress
+                            </p>
+                            <p class="mb-2">
+                                <span class="material-symbols-outlined align-middle me-2 text-primary">location_city</span>
+                                @Model.Order.ShippingCity, @Model.Order.ShippingPostalCode
+                            </p>
+                            <p class="mb-0">
+                                <span class="material-symbols-outlined align-middle me-2 text-primary">phone</span>
+                                @Model.Order.ShippingPhone
+                            </p>
+                        </div>
+                    </div>
+
+                    <a asp-page="/Orders/Index" class="btn btn-outline-primary w-100 mt-3">
+                        <span class="material-symbols-outlined align-middle me-1" style="font-size: 18px;">arrow_back</span>
+                        Siparişlere Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="py-5">
+        <div class="container text-center">
+            <span class="material-symbols-outlined text-muted" style="font-size: 5rem;">search_off</span>
+            <h2 class="mt-3">Sipariş bulunamadı</h2>
+            <a asp-page="/Orders/Index" class="btn btn-primary mt-3">Siparişlerime Dön</a>
+        </div>
+    </section>
+}

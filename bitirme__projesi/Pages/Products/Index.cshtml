@@ -1,0 +1,155 @@
+@page
+@model bitirme__projesi.Pages.Products.IndexModel
+@{
+    ViewData["Title"] = "Ürünler";
+}
+
+<section class="py-5">
+    <div class="container">
+        <!-- Başlık ve Filtreler -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                    <div>
+                        <h1 class="h2 fw-bold text-primary mb-1">Organik Ürünler</h1>
+                        <p class="text-muted mb-0">@Model.TotalProducts ürün bulundu</p>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-page="/Products/Index" class="btn btn-filter @(Model.SelectedCategoryId == null && string.IsNullOrEmpty(Model.SearchQuery) ? "active" : "")">
+                            Tümü
+                        </a>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <a asp-page="/Products/Index" asp-route-categoryId="@category.Id" asp-route-searchQuery="@Model.SearchQuery"
+                               class="btn btn-filter @(Model.SelectedCategoryId == category.Id ? "active" : "")">
+                                @category.Name
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arama Kutusu -->
+        <div class="row mb-4">
+            <div class="col-12 col-md-6 col-lg-4">
+                <form method="get" class="d-flex gap-2">
+                    @if (Model.SelectedCategoryId.HasValue)
+                    {
+                        <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+                    }
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <span class="material-symbols-outlined text-muted" style="font-size: 20px;">search</span>
+                        </span>
+                        <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control border-start-0"
+                               placeholder="Ürün ara..." />
+                        <button type="submit" class="btn btn-primary">Ara</button>
+                    </div>
+                </form>
+                @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                {
+                    <div class="mt-2">
+                        <span class="text-muted small">"@Model.SearchQuery" için sonuçlar</span>
+                        <a asp-page="/Products/Index" asp-route-categoryId="@Model.SelectedCategoryId" class="btn btn-sm btn-outline-secondary ms-2">
+                            <span class="material-symbols-outlined align-middle" style="font-size: 14px;">close</span>
+                            Temizle
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Ürün Grid -->
+        <div class="row g-4">
+            @if (Model.Products.Any())
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <a asp-page="/Products/Details" asp-route-id="@product.Id" class="text-decoration-none">
+                                <div class="position-relative">
+                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                    {
+                                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name"
+                                             style="height: 200px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                            <span class="material-symbols-outlined text-muted" style="font-size: 4rem;">spa</span>
+                                        </div>
+                                    }
+                                    @if (product.DiscountPrice.HasValue)
+                                    {
+                                        <span class="position-absolute top-0 end-0 badge bg-danger m-2">İndirim</span>
+                                    }
+                                    @if (product.IsFeatured)
+                                    {
+                                        <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-2">Öne Çıkan</span>
+                                    }
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <p class="text-muted small mb-1">@product.Category?.Name</p>
+                                <h5 class="card-title fw-bold mb-2">
+                                    <a asp-page="/Products/Details" asp-route-id="@product.Id" class="text-decoration-none text-dark">
+                                        @product.Name
+                                    </a>
+                                </h5>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    @if (product.DiscountPrice.HasValue)
+                                    {
+                                        <span class="text-decoration-line-through text-muted">₺@product.Price.ToString("N2")</span>
+                                        <span class="fw-bold text-primary fs-5">₺@product.DiscountPrice.Value.ToString("N2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold text-primary fs-5">₺@product.Price.ToString("N2")</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(product.Unit))
+                                    {
+                                        <span class="text-muted small">/ @product.Unit</span>
+                                    }
+                                </div>
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <span class="material-symbols-outlined align-middle me-1 fs-6">add_shopping_cart</span>
+                                        Sepete Ekle
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-5">
+                    <span class="material-symbols-outlined text-muted" style="font-size: 5rem;">inventory_2</span>
+                    @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                    {
+                        <h3 class="mt-3 text-muted">"@Model.SearchQuery" için sonuç bulunamadı</h3>
+                    }
+                    else
+                    {
+                        <h3 class="mt-3 text-muted">Bu kategoride ürün bulunamadı</h3>
+                    }
+                    <a asp-page="/Products/Index" class="btn btn-outline-primary mt-3">Tüm Ürünleri Gör</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .product-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+</style>

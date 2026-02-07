@@ -1,0 +1,25 @@
+@page
+@model bitirme__projesi.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Çıkış Yapıldı";
+}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-5">
+                        <span class="material-symbols-outlined text-success" style="font-size: 4rem;">check_circle</span>
+                        <h2 class="h3 fw-bold text-primary mt-3">Başarıyla Çıkış Yaptınız</h2>
+                        <p class="text-muted mb-4">Güvenli bir şekilde oturumunuz kapatıldı.</p>
+                        <a asp-page="/Index" class="btn btn-primary">
+                            <span class="material-symbols-outlined align-middle me-2">home</span>
+                            Ana Sayfa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
